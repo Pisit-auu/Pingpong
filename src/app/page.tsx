@@ -158,10 +158,13 @@ function Intro({ onStart }: { onStart: () => void }) {
         <span>🎯 แบบทดสอบใช้เวลา ~5-10 นาที</span>
       </div>
       <h1 className="text-3xl md:text-4xl font-bold mt-6">
-        My <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Blooming Key</span>
+        My{" "}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
+          Blooming Key
+        </span>
       </h1>
       <p className="text-gray-600 mt-3">
-        ค้น "กุญแจ" ที่ทำให้คุณเติบโตและทำงานได้อย่างเป็นตัวเอง
+        ค้น &quot;กุญแจ&quot; ที่ทำให้คุณเติบโตและทำงานได้อย่างเป็นตัวเอง
       </p>
       <div className="mt-10">
         <button
@@ -328,8 +331,8 @@ export default function Page() {
               choice={c}
               selected={answers[current.id] === c.id}
               onSelect={() => selectChoice(current.id, c.id)}
-            />)
-          )}
+            />
+          ))}
         </div>
       </div>
 
@@ -352,9 +355,3 @@ export default function Page() {
     </div>
   );
 }
-
-// หมายเหตุการใช้งาน
-// 1) ใส่ไฟล์นี้ที่: src/app/quiz/page.tsx (Next.js App Router)
-// 2) เปิดใช้ TailwindCSS และเพิ่มพื้นหลังสวย ๆ ใน layout ถ้าต้องการ
-// 3) ปรับแก้ QUESTIONS และ KEY_META ให้ตรงคอนเซ็ปต์ของคุณ
-// 4) ถ้าจะบันทึกผลลง DB ให้เชื่อมต่อ API route (เช่น POST /api/quiz/submit) ในฟังก์ชัน next() ตอนกดดูผล
