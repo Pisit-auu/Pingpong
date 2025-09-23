@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "หาหาวิลัยวิญญาณเฮี้ยน",
+  title: "มาหาวิลัย วิญญาณเฮี้ยน",
   description: "",
 };
 
