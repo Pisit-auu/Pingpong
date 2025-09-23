@@ -112,116 +112,124 @@ const QUESTIONS: Question[] = [
 ];
 
 const RESULT_META: Record<string, string> = {
-"ผีกะ": "คุณคือ ผีกะ ผีกะชอบสิงอยู่ในคน เกาะคนอื่นใช้ชีวิต ตอนกลางวันจะเป็นคนธรรมดา แต่พอตกกลางคืนแล้วสวยทันตาเห็น",
-"ผีกระสือ": "คุณคือ ผีกระสือ เน้นออกหากินในเวลากลางคืน กลางวันพักก่อน กลางคืนคือเวลาของพี่ ชอบเก็บตัวเวลากลางวัน ไม่ชอบสุงสิงกับใคร ขออยู่คนเดียว",
-"ผีปอบ": "คุณคือ ผีปอบ ผีปอบกินเก่งมาก ขอให้ได้กิน ชอบกินสุดๆ หิวอยู่อย่างงั้น เน้นออกหากินเวลากลางคืน ใครที่ได้ผีกะน่าจะชอบกิน บุฟเฟต์แน่นอน",
-"ผีนางรำ": "คุณคือ ผีนางรำ ผีนางรำสง่างาม อ่อนช้อย ชอบการรำมาก ถ้าในโลกของผีมี TikTok ผีนางรำคงได้เป็น tiktoker แล้วล่ะ",
+  "ผีกะ": "คุณคือ ผีกะ ผีกะชอบสิงอยู่ในคน เกาะคนอื่นใช้ชีวิต ตอนกลางวันจะเป็นคนธรรมดา แต่พอตกกลางคืนแล้วสวยทันตาเห็น",
+  "ผีกระสือ": "คุณคือ ผีกระสือ เน้นออกหากินในเวลากลางคืน กลางวันพักก่อน กลางคืนคือเวลาของพี่ ชอบเก็บตัวเวลากลางวัน ไม่ชอบสุงสิงกับใคร ขออยู่คนเดียว",
+  "ผีปอบ": "คุณคือ ผีปอบ ผีปอบกินเก่งมาก ขอให้ได้กิน ชอบกินสุดๆ หิวอยู่อย่างงั้น เน้นออกหากินเวลากลางคืน ใครที่ได้ผีกะน่าจะชอบกิน บุฟเฟต์แน่นอน",
+  "ผีนางรำ": "คุณคือ ผีนางรำ ผีนางรำสง่างาม อ่อนช้อย ชอบการรำมาก ถ้าในโลกของผีมี TikTok ผีนางรำคงได้เป็น tiktoker แล้วล่ะ",
 };
-
 
 export default function Page() {
-const [step, setStep] = useState<"intro" | "quiz" | "result">("intro");
-const [cursor, setCursor] = useState(0);
-const [answers, setAnswers] = useState<string[]>([]);
+  const [step, setStep] = useState<"intro" | "poem" | "quiz" | "result">("intro");
+  const [cursor, setCursor] = useState(0);
+  const [answers, setAnswers] = useState<string[]>([]);
 
+  const selectChoice = (choice: { label: string; ghost: string }) => {
+    setAnswers([...answers, choice.ghost]);
+    if (cursor < QUESTIONS.length - 1) setCursor(cursor + 1);
+    else setStep("result");
+  };
 
-const selectChoice = (choice: { label: string; ghost: string }) => {
-setAnswers([...answers, choice.ghost]);
-if (cursor < QUESTIONS.length - 1) setCursor(cursor + 1);
-else setStep("result");
-};
+  const restart = () => {
+    setStep("intro");
+    setCursor(0);
+    setAnswers([]);
+  };
 
+  const resultGhost = () => {
+    const counts: Record<string, number> = {};
+    for (const g of answers) counts[g] = (counts[g] || 0) + 1;
+    return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+  };
 
-const restart = () => {
-setStep("intro");
-setCursor(0);
-setAnswers([]);
-};
+  const FooterMessage = () => (
+    <p className="mt-6 text-center text-red-400 text-sm md:text-base">
+      แล้วอยากรู้ไหมว่าวิลัยเป็นผีอะไร ถ้าอยากรู้ก็ตามมาเจอกันได้ที่<br />
+      มหาวิทยาลัยรังสิต ตึก8 วันที่ 14-16 ตุลาคมนี้
+    </p>
+  );
 
+  return (
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 space-y-8">
+      <div className="w-64 mx-auto">
+        <Image
+          src="/mahawilai.png"
+          alt="มาหาวิลัย วิญญาณเฮี้ยน"
+          width={768}
+          height={768}
+          priority
+          className="w-full h-auto"
+        />
+      </div>
 
-const resultGhost = () => {
-const counts: Record<string, number> = {};
-for (const g of answers) counts[g] = (counts[g] || 0) + 1;
-return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
-};
+      {step === "intro" && (
+        <div className="text-center space-y-6 max-w-xl">
+          <h1 className="text-2xl md:text-3xl font-bold">คุณเคยตายไหม?</h1>
+          <p>ถ้าได้ลองตาย จะเป็นผีอะไร? ถ้าอยากรู้</p>
+          <button
+            onClick={() => setStep("poem")}
+            className="px-6 py-3 bg-red-700 hover:bg-red-800 rounded-lg font-semibold shadow-lg"
+          >
+            ลองกดดูสิ
+          </button>
+          <div className="mt-16 space-y-2">
+            <h2 className="text-xl font-bold">มาหาวิลัย วิญญาณเฮี้ยน</h2>
+            <p className="text-sm text-gray-400">
+              ** เป็นแบบทดสอบเพื่อความบันเทิงเท่านั้น ไม่ใช่แบบทดสอบทางจิตวิทยา **
+            </p>
+          </div>
+          <FooterMessage />
+        </div>
+      )}
 
+      {step === "poem" && (
+        <div className="text-center space-y-6 max-w-xl">
+          <p>
+            เสียงโหยสะท้อน ดังย้อนวิญญา<br />
+            เฝ้าจ้องเวลา ถึงคราจากกัน<br />
+            โอ้วิไลเอ๋ย ละเลยผูกพัน<br />
+            สิ้นคืนสิ้นวัน ไม่หวนคืนมา
+          </p>
+          <button
+            onClick={() => setStep("quiz")}
+            className="px-6 py-3 bg-red-700 hover:bg-red-800 rounded-lg font-semibold shadow-lg"
+          >
+            ถัดไป
+          </button>
+          <FooterMessage />
+        </div>
+      )}
 
-const FooterMessage = () => (
-<p className="mt-6 text-center text-red-400 text-sm md:text-base">
-แล้วอยากรู้ไหมว่าวิลัยเป็นผีอะไร ถ้าอยากรู้ก็ตามมาเจอกันได้ที่<br />
-มหาวิทยาลัยรังสิต ตึก8 วันที่ 14-16 ตุลาคมนี้
-</p>
-);
+      {step === "quiz" && (
+        <div className="max-w-2xl w-full space-y-8">
+          <h2 className="text-xl font-bold">{QUESTIONS[cursor].text}</h2>
+          <div className="space-y-4">
+            {QUESTIONS[cursor].choices.map((c, i) => (
+              <button
+                key={i}
+                onClick={() => selectChoice(c)}
+                className="w-full p-4 bg-gray-900 rounded-lg hover:bg-gray-800 text-left shadow"
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+          <FooterMessage />
+        </div>
+      )}
 
-
-return (
-<div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 space-y-8">
-<div className="w-64 mx-auto">
-<Image
-  src="/mahawilai.png"
-  alt="มาหาวิลัย วิญญาณเฮี้ยน"
-  width={768}
-  height={768}
-  priority
-  className="w-full h-auto"
-/>
-
-</div>
-
-
-{step === "intro" && (
-<div className="text-center space-y-6 max-w-xl">
-<h1 className="text-2xl md:text-3xl font-bold">คุณเคยตายไหม?</h1>
-<p>ถ้าได้ลองตาย จะเป็นผีอะไร? ถ้าอยากรู้</p>
-<button
-onClick={() => setStep("quiz")}
-className="px-6 py-3 bg-red-700 hover:bg-red-800 rounded-lg font-semibold shadow-lg"
->
-ลองกดดูสิ
-</button>
-<div className="mt-16 space-y-2">
-<h2 className="text-xl font-bold">มาหาวิลัย วิญญาณเฮี้ยน</h2>
-<p className="text-sm text-gray-400">
-** เป็นแบบทดสอบเพื่อความบันเทิงเท่านั้น ไม่ใช่แบบทดสอบทางจิตวิทยา **
-</p>
-</div>
-<FooterMessage />
-</div>
-)}
-
-
-{step === "quiz" && (
-<div className="max-w-2xl w-full space-y-8">
-<h2 className="text-xl font-bold">{QUESTIONS[cursor].text}</h2>
-<div className="space-y-4">
-{QUESTIONS[cursor].choices.map((c, i) => (
-<button
-key={i}
-onClick={() => selectChoice(c)}
-className="w-full p-4 bg-gray-900 rounded-lg hover:bg-gray-800 text-left shadow"
->
-{c.label}
-</button>
-))}
-</div>
-<FooterMessage />
-</div>
-)}
-
-
-{step === "result" && (
-<div className="text-center max-w-xl space-y-6">
-<h2 className="text-2xl font-bold">{resultGhost()}</h2>
-<p>{RESULT_META[resultGhost()]}</p>
-<FooterMessage />
-<button
-onClick={restart}
-className="mt-6 px-6 py-3 bg-red-700 hover:bg-red-800 rounded-lg font-semibold shadow-lg"
->
-ทำใหม่อีกครั้ง
-</button>
-</div>
-)}
-</div>
-);
+      {step === "result" && (
+        <div className="text-center max-w-xl space-y-6">
+          <h2 className="text-2xl font-bold">{resultGhost()}</h2>
+          <p>{RESULT_META[resultGhost()]}</p>
+          <FooterMessage />
+          <button
+            onClick={restart}
+            className="mt-6 px-6 py-3 bg-red-700 hover:bg-red-800 rounded-lg font-semibold shadow-lg"
+          >
+            ทำใหม่อีกครั้ง
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
