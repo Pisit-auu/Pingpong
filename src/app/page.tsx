@@ -11,7 +11,8 @@ interface Question {
 const QUESTIONS: Question[] = [
   {
     id: 1,
-    text: "ถ้าคุณกำลังฝันว่าอยู่ในมหาวิทยาลัยร้าง คุณจะทำสิ่งใดเป็นอย่างแรก",
+    text:
+      "ถ้าคุณกำลังฝันว่าอยู่ในมหาวิทยาลัยร้าง คุณจะทำสิ่งใดเป็นอย่างแรก",
     choices: [
       { label: "เดินสำรวจมหาวิทยาลัย", ghost: "" },
       { label: "อยู่เฉยๆกลัวไม่กล้าไปไหน", ghost: "" },
@@ -33,7 +34,10 @@ const QUESTIONS: Question[] = [
     text: "แล้วถ้าเลือกคบเพื่อนล่ะ จะเลือกคบยังไง?",
     choices: [
       { label: "ติดสวย แกงค์ลูกคุณ", ghost: "ผีกะ" },
-      { label: "Tiktoker วันๆพันคอนเทนต์ เน้นรำตึงๆ", ghost: "ผีนางรำ" },
+      {
+        label: "Tiktoker วันๆพันคอนเทนต์ เน้นรำตึงๆ",
+        ghost: "ผีนางรำ",
+      },
       { label: "introvert เพื่อนน้อย แต่ 100%", ghost: "ผีกระสือ" },
       { label: "สายกิน เลิกเรียนเจอกันตี๋น้อย", ghost: "ผีปอบ" },
     ],
@@ -110,15 +114,11 @@ const QUESTIONS: Question[] = [
   },
 ];
 
-const RESULT_META: Record<string, string> = {
-  "ผีกะ": "คุณคือ ผีกะ ผีกะชอบสิงอยู่ในคน เกาะคนอื่นใช้ชีวิต ตอนกลางวันจะเป็นคนธรรมดา แต่พอตกกลางคืนแล้วสวยทันตาเห็น",
-  "ผีกระสือ": "คุณคือ ผีกระสือ เน้นออกหากินในเวลากลางคืน กลางวันพักก่อน กลางคืนคือเวลาของพี่ ชอบเก็บตัวเวลากลางวัน ไม่ชอบสุงสิงกับใคร ขออยู่คนเดียว",
-  "ผีปอบ": "คุณคือ ผีปอบ ผีปอบกินเก่งมาก ขอให้ได้กิน ชอบกินสุดๆ หิวอยู่อย่างงั้น เน้นออกหากินเวลากลางคืน ใครที่ได้ผีกะน่าจะชอบกิน บุฟเฟต์แน่นอน",
-  "ผีนางรำ": "คุณคือ ผีนางรำ ผีนางรำสง่างาม อ่อนช้อย ชอบการรำมาก ถ้าในโลกของผีมี TikTok ผีนางรำคงได้เป็น tiktoker แล้วล่ะ",
-};
+
 
 export default function Page() {
-  const [step, setStep] = useState<"intro" | "poem" | "quiz" | "result">("intro");
+  const [step, setStep] =
+    useState<"intro" | "poem" | "quiz" | "result">("intro");
   const [cursor, setCursor] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
 
@@ -134,23 +134,12 @@ export default function Page() {
     setAnswers([]);
   };
 
-  const resultGhost = () => {
-    const counts: Record<string, number> = {};
-    for (const g of answers) counts[g] = (counts[g] || 0) + 1;
-    return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
-  };
 
-  const FooterMessage = () => (
-    <p className="mt-6 text-center text-red-200 text-sm md:text-base drop-shadow">
-      แล้วอยากรู้ไหมว่าวิลัยเป็นผีอะไร ถ้าอยากรู้ก็ตามมาเจอกันได้ที่<br />
-      มหาวิทยาลัยรังสิต ตึก8 วันที่ 14-16 ตุลาคมนี้
-    </p>
-  );
 
   const bgFor = (s: typeof step, ghost?: string) => {
-    if (s === "intro") return "/S__14794756_0.jpg"; // Intro poster
-    if (s === "poem") return "/S__14794757_0.jpg"; // Poem poster
-    if (s === "quiz") return "/S__14794758_0.jpg"; // Generic red bg
+    if (s === "intro") return "/S__14794756_0.jpg";
+    if (s === "poem") return "/S__14794757_0.jpg";
+    if (s === "quiz") return "/S__14794758_0.jpg";
     if (s === "result") {
       if (ghost === "ผีกระสือ") return "/S__14794759_0.jpg";
       if (ghost === "ผีกะ") return "/S__14794760_0.jpg";
@@ -161,94 +150,101 @@ export default function Page() {
     return "/S__14794758_0.jpg";
   };
 
-  const ghostNow = answers.length
-    ? Object.entries(
-        answers.reduce<Record<string, number>>((acc, g) => {
-          acc[g] = (acc[g] || 0) + 1;
-          return acc;
-        }, {})
-      ).sort((a, b) => b[1] - a[1])[0][0]
-    : undefined;
+  const ghostNow =
+    answers.length > 0
+      ? Object.entries(
+          answers.reduce<Record<string, number>>((acc, g) => {
+            acc[g] = (acc[g] || 0) + 1;
+            return acc;
+          }, {})
+        ).sort((a, b) => b[1] - a[1])[0][0]
+      : undefined;
 
   return (
     <div
-      className="relative min-h-screen text-white flex flex-col items-center justify-center p-6"
+      className="relative min-h-screen text-white flex items-center justify-center p-4 sm:p-6"
       style={{
         backgroundImage: `url('${bgFor(step, ghostNow)}')`,
-        backgroundSize: "contain",
+        backgroundSize: "contain", // ให้ภาพไม่ล้นมือถือ/ไอแพด
         backgroundPosition: "center",
-        backgroundRepeat: "no-repeat"
-        
+        backgroundRepeat: "no-repeat",
       }}
     >
-      {/* overlay */}
-      <div className="absolute inset-0 " />
-
-      <div className="relative z-10 w-full max-w-3xl mx-auto space-y-8">
+      {/* ใช้ container กลางจอ เพื่อควบคุมความกว้างในทุกอุปกรณ์ */}
+      <div className="relative z-10 w-full max-w-[680px] mx-auto">
+        {/* INTRO */}
         {step === "intro" && (
-          <div className="text-center space-y-6 max-w-xl mx-auto">
-            
+        <div className="flex flex-col items-center justify-center min-h-[80vh]">
+          <button
+            onClick={() => setStep("poem")}
+            className="mt-20 sm:mt-28 md:mt-32
+                      px-6 py-3 bg-red-700 hover:bg-red-800 
+                      rounded-xl font-semibold shadow-lg transition 
+                      active:scale-95"
+          >
+            ลองกดดูสิ
+          </button>
+        </div>
+      )}
+
+
+
+        {/* POEM */}
+        {step === "poem" && (
+         <div className="flex flex-col items-center justify-end min-h-[80vh] pb-16 sm:pb-24">
             <button
-              onClick={() => setStep("poem")}
-              className="mt-60 px-7 py-3 bg-red-700 hover:bg-red-800 rounded-xl font-semibold shadow-[0_8px_20px_rgba(220,20,60,0.45)] transition"
+              onClick={() => setStep("quiz")}
+              className="px-6 py-3 bg-red-700 hover:bg-red-800 
+                        rounded-xl font-semibold shadow-lg transition 
+                        active:scale-95"
             >
-              ลองกดดูสิ
+              ถัดไป
             </button>
-            <div className="mt-16 space-y-2">
   
+          </div>
+        )}
+
+        {/* QUIZ */}
+        {step === "quiz" && (
+          <div className="w-full mx-auto">
+            <div
+              className="mx-auto w-[92vw] max-w-[520px] 
+                         bg-black/45 border border-red-900/30
+                         rounded-2xl p-4 sm:p-5 md:p-6 
+                         shadow-[0_10px_30px_rgba(0,0,0,.6)]"
+            >
+              <h2 className="text-base sm:text-lg md:text-xl font-bold drop-shadow mb-3 sm:mb-4">
+                {QUESTIONS[cursor].text}
+              </h2>
+
+              <div className="space-y-2.5 sm:space-y-3">
+                {QUESTIONS[cursor].choices.map((c, i) => (
+                  <button
+                    key={i}
+                    onClick={() => selectChoice(c)}
+                    className="w-full p-3 sm:p-3.5 md:p-4 
+                               bg-black/60 border border-red-900/30 rounded-xl 
+                               text-left transition 
+                               hover:bg-red-800/70 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(220,20,60,0.6)] 
+                               active:scale-95 active:bg-red-900/80"
+                  >
+                    <span className="text-sm sm:text-base">{c.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
           </div>
         )}
 
-        {step === "poem" && (
-          <div className="text-center space-y-6 max-w-2xl mx-auto">
-          
-            <button
-              onClick={() => setStep("quiz")}
-              className="mt-120 px-7 py-3 bg-red-700 hover:bg-red-800 rounded-xl font-semibold shadow-[0_8px_20px_rgba(220,20,60,0.45)] transition"
-            >
-              ถัดไป
-            </button>
- 
-          </div>
-        )}
-
-        {step === "quiz" && (
-              <div className="w-full mx-auto">
-                {/* การ์ดคำถามกว้างพอดีกับรูป: สูงสุด ~520px และไม่เกิน 92vw */}
-                <div className="mx-auto w-[min(92vw,520px)] bg-black/45 border border-red-900/30
-                                rounded-2xl p-5 md:p-6 shadow-[0_10px_30px_rgba(0,0,0,.6)]">
-                  <h2 className="text-lg md:text-xl font-bold drop-shadow mb-4">
-                    {QUESTIONS[cursor].text}
-                  </h2>
-
-                  <div className="space-y-3">
-                    {QUESTIONS[cursor].choices.map((c, i) => (
-                                        <button
-                      key={i}
-                      onClick={() => selectChoice(c)}
-                      className="w-full p-3.5 md:p-4 
-                                bg-black/60 border border-red-900/30 rounded-xl 
-                                text-left transition 
-                                hover:bg-red-800/70 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(220,20,60,0.6)] 
-                                active:scale-[0.97] active:bg-red-900/80"
-                    >
-                      {c.label}
-                    </button>
-
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
+        {/* RESULT */}
         {step === "result" && (
-          <div className="text-center max-w-2xl space-y-6 mx-auto">
-           
+           <div className="mt-20 flex flex-col items-center justify-end min-h-[80vh] pb-16 sm:pb-24">
             <button
               onClick={restart}
-              className="mt-150 px-4 py-1 bg-red-700 hover:bg-red-800 rounded-xl font-semibold shadow-[0_8px_20px_rgba(220,20,60,0.45)] transition"
+             className="px-3 py-2 bg-red-700 hover:bg-red-800 
+                 rounded-xl font-semibold shadow-lg transition 
+                 active:scale-95"
             >
               ทำใหม่อีกครั้ง
             </button>
