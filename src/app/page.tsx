@@ -200,7 +200,7 @@ export default function Page() {
                  text-sm sm:text-base md:text-lg 
                  font-semibold text-white drop-shadow text-center"
     >
-       มีคนเล่นจบแล้วทั้งหมด{" "}
+       เว็ปไซต์นี้มีคนเข้ามาเล่นแล้ว{" "}
       <span className="text-red-600">{finishedCount ?? "..."}</span> คน
     </p>
           </div>
