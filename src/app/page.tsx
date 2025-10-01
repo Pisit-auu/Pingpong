@@ -238,18 +238,20 @@ export default function Page() {
         )}
 
         {/* RESULT */}
-        {step === "result" && (
-           <div className="mt-20 flex flex-col items-center justify-end min-h-[80vh] pb-16 sm:pb-24">
-            <button
-              onClick={restart}
-             className="px-3 py-2 bg-red-700 hover:bg-red-800 
-                 rounded-xl font-semibold shadow-lg transition 
-                 active:scale-95"
-            >
-              ทำใหม่อีกครั้ง
-            </button>
-          </div>
-        )}
+{step === "result" && (
+  <div className="w-full mx-auto text-center space-y-6">
+
+    <button
+      onClick={restart}
+      className="fixed bottom-36 left-1/2 -translate-x-1/2 
+                 px-6 py-3 bg-red-700 hover:bg-red-800 rounded-xl font-semibold 
+                 shadow-[0_8px_20px_rgba(220,20,60,0.45)] transition active:scale-95"
+    >
+      ทำใหม่อีกครั้ง
+    </button>
+  </div>
+)}
+
       </div>
     </div>
   );
