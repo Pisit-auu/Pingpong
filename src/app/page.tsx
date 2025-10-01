@@ -194,14 +194,14 @@ export default function Page() {
               ลองกดดูสิ
               
             </button>
-               <p
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 
+                <p
+      className="fixed bottom-4 left-1/2 -translate-x-1/2
                  w-full max-w-[680px] px-4
-                 text-sm sm:text-base md:text-lg 
+                 text-sm sm:text-base md:text-lg
                  font-semibold text-white drop-shadow text-center"
     >
-       เว็ปไซต์นี้มีคนเข้ามาเล่นแล้ว{" "}
-      <span className="text-red-600">{finishedCount ?? "..."}</span> คน
+      เว็ปไซต์นี้มีคนเข้ามาเล่นแล้ว {" "}
+      <span className="text-red-600">{finishedCount ?? "..."} </span> คน
     </p>
           </div>
         )}
