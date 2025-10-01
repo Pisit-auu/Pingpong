@@ -11,8 +11,7 @@ interface Question {
 const QUESTIONS: Question[] = [
   {
     id: 1,
-    text:
-      "ถ้าคุณกำลังฝันว่าอยู่ในมหาวิทยาลัยร้าง คุณจะทำสิ่งใดเป็นอย่างแรก",
+    text: "ถ้าคุณกำลังฝันว่าอยู่ในมหาวิทยาลัยร้าง คุณจะทำสิ่งใดเป็นอย่างแรก",
     choices: [
       { label: "เดินสำรวจมหาวิทยาลัย", ghost: "" },
       { label: "อยู่เฉยๆกลัวไม่กล้าไปไหน", ghost: "" },
@@ -34,10 +33,7 @@ const QUESTIONS: Question[] = [
     text: "แล้วถ้าเลือกคบเพื่อนล่ะ จะเลือกคบยังไง?",
     choices: [
       { label: "ติดสวย แกงค์ลูกคุณ", ghost: "ผีกะ" },
-      {
-        label: "Tiktoker วันๆพันคอนเทนต์ เน้นรำตึงๆ",
-        ghost: "ผีนางรำ",
-      },
+      { label: "Tiktoker วันๆพันคอนเทนต์ เน้นรำตึงๆ", ghost: "ผีนางรำ" },
       { label: "introvert เพื่อนน้อย แต่ 100%", ghost: "ผีกระสือ" },
       { label: "สายกิน เลิกเรียนเจอกันตี๋น้อย", ghost: "ผีปอบ" },
     ],
@@ -114,11 +110,8 @@ const QUESTIONS: Question[] = [
   },
 ];
 
-
-
 export default function Page() {
-  const [step, setStep] =
-    useState<"intro" | "poem" | "quiz" | "result">("intro");
+  const [step, setStep] = useState<"intro" | "poem" | "quiz" | "result">("intro");
   const [cursor, setCursor] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
 
@@ -133,8 +126,6 @@ export default function Page() {
     setCursor(0);
     setAnswers([]);
   };
-
-
 
   const bgFor = (s: typeof step, ghost?: string) => {
     if (s === "intro") return "/S__14794756_0.jpg";
@@ -165,42 +156,34 @@ export default function Page() {
       className="relative min-h-screen text-white flex items-center justify-center p-4 sm:p-6"
       style={{
         backgroundImage: `url('${bgFor(step, ghostNow)}')`,
-        backgroundSize: "contain", // ให้ภาพไม่ล้นมือถือ/ไอแพด
+        backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
-      {/* ใช้ container กลางจอ เพื่อควบคุมความกว้างในทุกอุปกรณ์ */}
+      {/* คอนเทนต์กลางจอ */}
       <div className="relative z-10 w-full max-w-[680px] mx-auto">
         {/* INTRO */}
         {step === "intro" && (
-        <div className="flex flex-col items-center justify-center min-h-[80vh]">
-          <button
-            onClick={() => setStep("poem")}
-            className="mt-20 sm:mt-28 md:mt-32
-                      px-6 py-3 bg-red-700 hover:bg-red-800 
-                      rounded-xl font-semibold shadow-lg transition 
-                      active:scale-95"
-          >
-            ลองกดดูสิ
-          </button>
-        </div>
-      )}
-
-
+          <div className="flex flex-col items-center justify-center min-h-[80vh]">
+            <button
+              onClick={() => setStep("poem")}
+              className="mt-20 sm:mt-28 md:mt-32 px-6 py-3 bg-red-700 hover:bg-red-800 rounded-xl font-semibold shadow-lg transition active:scale-95"
+            >
+              ลองกดดูสิ
+            </button>
+          </div>
+        )}
 
         {/* POEM */}
         {step === "poem" && (
-         <div className="flex flex-col items-center justify-end min-h-[80vh] pb-16 sm:pb-24">
+          <div className="mb-12 flex flex-col items-center justify-end min-h-[80vh] pb-16 sm:pb-24">
             <button
               onClick={() => setStep("quiz")}
-              className="px-6 py-3 bg-red-700 hover:bg-red-800 
-                        rounded-xl font-semibold shadow-lg transition 
-                        active:scale-95"
+              className="px-6 py-3 bg-red-700 hover:bg-red-800 rounded-xl font-semibold shadow-lg transition active:scale-95"
             >
               ถัดไป
             </button>
-  
           </div>
         )}
 
@@ -233,25 +216,34 @@ export default function Page() {
                 ))}
               </div>
             </div>
-
           </div>
         )}
 
         {/* RESULT */}
-{step === "result" && (
-  <div className="w-full mx-auto text-center space-y-6">
+        {step === "result" && (
+          <>
+            {/* เนื้อหา/คำทำนาย ฯลฯ ใส่ได้เต็มที่ */}
+            <div className="w-full mx-auto text-center space-y-6
+                            pb-28 sm:pb-32
+                            [padding-bottom:calc(env(safe-area-inset-bottom,0px)+7rem)]">
+              {/* ...เนื้อหาผลลัพธ์ของคุณ... */}
+            </div>
 
-    <button
-      onClick={restart}
-      className="fixed bottom-36 left-1/2 -translate-x-1/2 
-                 px-6 py-3 bg-red-700 hover:bg-red-800 rounded-xl font-semibold 
-                 shadow-[0_8px_20px_rgba(220,20,60,0.45)] transition active:scale-95"
-    >
-      ทำใหม่อีกครั้ง
-    </button>
-  </div>
-)}
-
+            {/* ปุ่มรีสตาร์ท: ชิดล่างจอ แต่ความกว้างเท่าคอนเทนต์/รูป */}
+            <button
+              onClick={restart}
+              className="fixed bottom-0 left-1/2 -translate-x-1/2 
+                         w-[92vw] max-w-[520px]
+                         px-6 py-3 bg-red-700 hover:bg-red-800 
+                         rounded-t-xl font-semibold 
+                         shadow-[0_-8px_20px_rgba(220,20,60,0.45)]
+                         transition active:scale-95
+                         [padding-bottom:env(safe-area-inset-bottom,0px)]"
+            >
+              ทำใหม่อีกครั้ง
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
