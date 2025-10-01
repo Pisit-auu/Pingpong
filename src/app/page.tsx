@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Question {
   id: number;
@@ -114,6 +114,27 @@ export default function Page() {
   const [step, setStep] = useState<"intro" | "poem" | "quiz" | "result">("intro");
   const [cursor, setCursor] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
+  const [finishedCount, setFinishedCount] = useState<number | null>(null);
+
+
+  useEffect(() => {
+    if (step === "intro") {
+      fetch("/api/countplayer")
+        .then((res) => res.json())
+        .then((data) => setFinishedCount(data.finished))
+        .catch(() => {});
+    }
+  }, [step]);
+
+  // เวลาเข้าหน้า result → เพิ่ม +1 และโหลดค่าล่าสุด
+  useEffect(() => {
+    if (step === "result") {
+      fetch("/api/countplayer", { method: "POST" })
+        .then((res) => res.json())
+        .then((data) => setFinishedCount(data.finished))
+        .catch(() => {});
+    }
+  }, [step]);
 
   const selectChoice = (choice: { label: string; ghost: string }) => {
     setAnswers((prev) => [...prev, choice.ghost]);
@@ -171,7 +192,17 @@ export default function Page() {
               className="mt-20 sm:mt-28 md:mt-32 px-6 py-3 bg-red-700 hover:bg-red-800 rounded-xl font-semibold shadow-lg transition active:scale-95"
             >
               ลองกดดูสิ
+              
             </button>
+               <p
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 
+                 w-full max-w-[680px] px-4
+                 text-sm sm:text-base md:text-lg 
+                 font-semibold text-white drop-shadow text-center"
+    >
+       มีคนเล่นจบแล้วทั้งหมด{" "}
+      <span className="text-red-600">{finishedCount ?? "..."}</span> คน
+    </p>
           </div>
         )}
 
